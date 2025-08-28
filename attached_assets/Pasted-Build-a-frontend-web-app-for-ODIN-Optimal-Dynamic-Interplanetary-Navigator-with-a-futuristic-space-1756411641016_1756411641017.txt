@@ -1,0 +1,93 @@
+Build a frontend web app for ODIN (Optimal Dynamic Interplanetary Navigator) with a futuristic space-mission control theme.
+
+Stack:
+
+React + Vite + TailwindCSS
+
+Framer Motion for animations
+
+Lucide-react for icons
+
+Overall Aesthetic (Astro Modern Vibes):
+
+Dark nebula gradient background (deep navy → cosmic purple → glowing blue).
+
+Glassmorphism UI panels (translucent with frosted blur, soft neon glows).
+
+Animated particle stars in the background (small glowing dots drifting slowly).
+
+Typography: sleek sans-serif for titles, font-mono for mission logs.
+
+Color palette: cosmic blue, neon cyan, glowing purple, asteroid gray.
+
+Layout:
+
+Top Nav Bar:
+
+ODIN logo (stylized planet + orbit icon).
+
+Title: “Optimal Dynamic Interplanetary Navigator”.
+
+Neon glowing underline animation.
+
+Main Dashboard (grid layout):
+
+Mission Hazard Input Panel (Glass card with dropdown + Run button).
+
+Decision Log Panel (Animated JSON-like logs with typewriter effect).
+
+Crew-Friendly Summary Panel (Slide-up explanation with emojis).
+
+Trajectory Visualization Panel (Simple animated SVG orbit lines: original vs adjusted path).
+
+Features:
+
+Hazard Selector:
+
+Dropdown: Solar Flare ☀️, Space Debris 🛰️, Engine Failure ⚡.
+
+Custom input option.
+
+Smooth dropdown animation.
+
+Run ODIN Button:
+
+Large glowing button with hover animation.
+
+On click → triggers loading animation (rotating planet/spaceship).
+
+Animated Decision Log:
+
+Panel slides in from the right.
+
+Each new log entry appears with fade + typewriter effect.
+
+JSON-style formatting with neon syntax colors.
+
+Crew-Friendly Summary:
+
+Text explanation in plain English (e.g., “⚠️ Solar storm detected. Rerouting. +6 hrs but safer ✅”).
+
+Appears with motion.div slide-up + fade.
+
+Trajectory Visualization:
+
+Minimalistic SVG showing two orbital arcs (before + after).
+
+Animate arcs with stroke-dasharray line drawing effect.
+
+Glow effect on safe trajectory line.
+
+Demo Flow:
+
+User selects “Solar Flare” → clicks Run ODIN.
+
+Background stars slowly move.
+
+Button animates → Logs slide in with JSON trade-offs.
+
+Crew summary panel slides up.
+
+Trajectory arcs animate on the screen.
+
+Goal: A futuristic, animated, hackathon-ready frontend that feels like NASA meets sci-fi Astro UI.
