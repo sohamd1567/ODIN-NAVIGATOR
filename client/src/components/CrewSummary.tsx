@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 
 interface CrewSummaryProps {
   analysisComplete: boolean;
@@ -15,6 +16,19 @@ interface SummaryData {
 
 export default function CrewSummary({ analysisComplete, hazardType }: CrewSummaryProps) {
   const [summaryData, setSummaryData] = useState<SummaryData | null>(null);
+
+  // Fetch live NASA data for enhanced crew summaries
+  const { data: solarFlares = [] } = useQuery({
+    queryKey: ['/api/solar-flares'],
+    refetchInterval: 300000,
+    retry: 2
+  });
+
+  const { data: moonData } = useQuery({
+    queryKey: ['/api/moon-data'],
+    refetchInterval: 3600000,
+    retry: 2
+  });
 
   const summaryContent: Record<string, SummaryData> = {
     "solar-flare": {

@@ -1,10 +1,11 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Loader2 } from "lucide-react";
+import { Loader2, AlertTriangle, Zap } from "lucide-react";
 
 interface HazardInputPanelProps {
   onAnalysis: (hazard: string) => void;
@@ -17,13 +18,61 @@ export default function HazardInputPanel({ onAnalysis, isAnalyzing, analysisComp
   const [customHazard, setCustomHazard] = useState("");
   const [showCustomInput, setShowCustomInput] = useState(false);
 
-  const hazardOptions = [
-    { value: "solar-flare", label: "☀️ Solar Flare - High radiation event" },
-    { value: "space-debris", label: "🛰️ Space Debris - Orbital collision risk" },
-    { value: "engine-failure", label: "⚡ Engine Failure - Propulsion malfunction" },
-    { value: "communication-loss", label: "📡 Communication Loss - Signal disruption" },
-    { value: "custom", label: "🔧 Custom Scenario" },
-  ];
+  // Fetch live space hazard data from NASA APIs
+  const { data: solarFlares = [] } = useQuery({
+    queryKey: ['/api/solar-flares'],
+    refetchInterval: 300000, // Refresh every 5 minutes
+    retry: 2
+  });
+
+  const { data: asteroids = [] } = useQuery({
+    queryKey: ['/api/near-earth-objects'],
+    refetchInterval: 3600000, // Refresh every hour
+    retry: 2
+  });
+
+  // Create dynamic hazard options based on real NASA data
+  const getHazardOptions = () => {
+    const baseOptions = [
+      { value: "engine-failure", label: "⚡ Engine Failure - Propulsion malfunction" },
+      { value: "communication-loss", label: "📡 Communication Loss - Signal disruption" },
+      { value: "custom", label: "🔧 Custom Scenario" },
+    ];
+
+    // Add live solar flare alerts if detected
+    if (Array.isArray(solarFlares) && solarFlares.length > 0) {
+      const latestFlare = solarFlares[0] as any;
+      baseOptions.unshift({
+        value: "live-solar-flare",
+        label: `🌞 LIVE: ${latestFlare.classType} Solar Flare - ${latestFlare.sourceLocation}`
+      });
+    } else {
+      baseOptions.unshift({
+        value: "solar-flare",
+        label: "☀️ Solar Flare - High radiation event"
+      });
+    }
+
+    // Add live asteroid alerts if detected
+    if (Array.isArray(asteroids) && asteroids.length > 0) {
+      const hazardousAsteroid = asteroids.find((a: any) => a.is_potentially_hazardous_asteroid);
+      if (hazardousAsteroid) {
+        baseOptions.splice(1, 0, {
+          value: "live-asteroid",
+          label: `🛰️ LIVE: ${hazardousAsteroid.name} - Hazardous approach`
+        });
+      }
+    }
+
+    if (!baseOptions.find(opt => opt.value.includes('asteroid') || opt.value.includes('debris'))) {
+      baseOptions.splice(1, 0, {
+        value: "space-debris",
+        label: "🛰️ Space Debris - Orbital collision risk"
+      });
+    }
+
+    return baseOptions;
+  };
 
   const handleHazardChange = (value: string) => {
     setSelectedHazard(value);
@@ -64,14 +113,25 @@ export default function HazardInputPanel({ onAnalysis, isAnalyzing, analysisComp
               <SelectValue placeholder="Choose hazard scenario..." />
             </SelectTrigger>
             <SelectContent className="glass-panel border border-border/50">
-              {hazardOptions.map((option) => (
+              {getHazardOptions().map((option) => (
                 <SelectItem 
                   key={option.value} 
                   value={option.value}
-                  className="font-mono hover:bg-primary/10"
+                  className={`font-mono hover:bg-primary/10 ${
+                    option.value.startsWith('live-') ? 'text-red-400 font-semibold' : ''
+                  }`}
                   data-testid={`option-${option.value}`}
                 >
-                  {option.label}
+                  <div className="flex items-center space-x-2">
+                    {option.value.startsWith('live-') && (
+                      <motion.div
+                        animate={{ opacity: [1, 0.3, 1] }}
+                        transition={{ duration: 1, repeat: Infinity }}
+                        className="w-2 h-2 bg-red-500 rounded-full"
+                      />
+                    )}
+                    <span>{option.label}</span>
+                  </div>
                 </SelectItem>
               ))}
             </SelectContent>

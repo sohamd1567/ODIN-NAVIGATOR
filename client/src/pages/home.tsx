@@ -4,6 +4,7 @@ import HazardInputPanel from "@/components/HazardInputPanel";
 import TrajectoryVisualization from "@/components/TrajectoryVisualization";
 import DecisionLog from "@/components/DecisionLog";
 import CrewSummary from "@/components/CrewSummary";
+import MoonPhaseWidget from "@/components/MoonPhaseWidget";
 import { useState } from "react";
 
 export default function Home() {
@@ -58,6 +59,7 @@ export default function Home() {
           </div>
           
           <div className="flex items-center space-x-4">
+            <MoonPhaseWidget />
             <div className="px-3 py-1 glass-panel rounded-full text-sm text-muted-foreground">
               Mission Status: <span className="text-primary font-mono" data-testid="status-active">ACTIVE</span>
             </div>

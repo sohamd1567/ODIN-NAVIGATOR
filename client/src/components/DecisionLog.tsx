@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 
 interface DecisionLogProps {
   isAnalyzing: boolean;
@@ -17,6 +18,19 @@ interface LogEntry {
 export default function DecisionLog({ isAnalyzing, analysisComplete, hazardType }: DecisionLogProps) {
   const [logEntries, setLogEntries] = useState<LogEntry[]>([]);
   const [currentEntry, setCurrentEntry] = useState<LogEntry | null>(null);
+
+  // Fetch live NASA data for enhanced decision logs
+  const { data: solarFlares = [] } = useQuery({
+    queryKey: ['/api/solar-flares'],
+    refetchInterval: 300000,
+    retry: 2
+  });
+
+  const { data: asteroids = [] } = useQuery({
+    queryKey: ['/api/near-earth-objects'],
+    refetchInterval: 3600000,
+    retry: 2
+  });
 
   useEffect(() => {
     if (isAnalyzing) {

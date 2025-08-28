@@ -1,0 +1,44 @@
+You are building ODIN: Onboard Dynamic Intelligent Navigator, a modern space mission AI dashboard. 
+
+Update the existing prototype with these enhancements:  
+
+1. 🌌 APIs & Data Integration:
+   - Use my NASA API key: TKcBG6JgxzMZLuRTcACGNMPIwBx1k0fL8z63tRbo
+     → Integrate DONKI Solar Flare API and NEO Asteroid feed.
+   - Use Astronomy API (Application ID + Secret provided below)
+     → Show Moon phase, position, and Earth–Moon trajectory.
+     Application ID: a4c2cae9-e736-4529-b95b-9a1962a15e80
+     Application Secret: dd864839465c47e3a2988fb51667026da19c792a8c7bb7e8505e29afb0347b7449f2408fccd77a0f554d2b9ef9b58affa89da1ecfd7421bc18cfe2a0a1bc0546bde8af965ac7b4b8c143a427c18124c8b569d9f94985f7f568e3e4297ff5a362ce7c9b51a8af2810a9fdf191fac29b17
+
+2. 🛰️ Trajectory Visualization:
+   - Replace Earth→Mars path with Earth→Moon orbit transfer.
+   - Animate trajectory using SVG path with glowing neon-blue effects.
+   - Add tiny animated spacecraft moving along the path.
+
+3. ✨ UI Enhancements:
+   - Keep the **Astro/modern glassmorphism vibe**.
+   - Use a dark nebula gradient background (navy→purple→blue).
+   - Framer Motion for smooth panel transitions.
+   - Neon-glow borders for panels and buttons.
+   - Add a small live “Moon Phase” widget in the dashboard.
+
+4. 🧩 Components to Update:
+   - `TrajectoryVisualization`: now pulls Earth–Moon data from Astronomy API.
+   - `HazardInput`: add live hazards from NASA API (solar flares & asteroids).
+   - `CrewSummary`: include real Moon phase + hazard warnings with emojis.
+   - `DecisionLog`: log API events in JSON + human-readable summaries.
+
+5. 🌠 Animations:
+   - Add background starfield particle animation.
+   - When user clicks **Run ODIN**, spacecraft launches along trajectory.
+   - Typewriter animation for hazard alerts.
+
+6. ⚡ Tech Stack:
+   - React + Vite
+   - TailwindCSS + custom CSS for nebula gradients & glassmorphism
+   - Framer Motion for animations
+   - Lucide-react for cosmic icons
+   - APIs: NASA + Astronomy API
+
+Make the interface futuristic, mission-ready, and responsive. 
+Explain in comments how each API is integrated and how the trajectory logic works.

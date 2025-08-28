@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 
 interface TrajectoryVisualizationProps {
   showTrajectory: boolean;
@@ -8,6 +9,13 @@ interface TrajectoryVisualizationProps {
 
 export default function TrajectoryVisualization({ showTrajectory, isAnimating }: TrajectoryVisualizationProps) {
   const [showSpaceship, setShowSpaceship] = useState(false);
+
+  // Fetch real moon data for accurate trajectory calculations
+  const { data: moonData } = useQuery({
+    queryKey: ['/api/moon-data'],
+    refetchInterval: 3600000, // Refresh every hour
+    retry: 2
+  });
 
   useEffect(() => {
     if (showTrajectory) {
@@ -122,7 +130,7 @@ export default function TrajectoryVisualization({ showTrajectory, isAnimating }:
           
           {/* Labels */}
           <text x="200" y="130" textAnchor="middle" className="text-xs fill-muted-foreground font-mono opacity-60">
-            Direct Route
+            Direct Route (3.5 days)
           </text>
           {showTrajectory && (
             <motion.text 
@@ -135,7 +143,10 @@ export default function TrajectoryVisualization({ showTrajectory, isAnimating }:
               transition={{ delay: 1 }}
               data-testid="label-safe-route"
             >
-              Safe Route (+6 hrs)
+              {moonData ? 
+                `Optimized Route (${Math.round(((moonData as any).moonPosition?.distance || 384400) / 384400 * 3.5 * 10) / 10} days)` :
+                'Safe Route (+6 hrs)'
+              }
             </motion.text>
           )}
         </svg>
