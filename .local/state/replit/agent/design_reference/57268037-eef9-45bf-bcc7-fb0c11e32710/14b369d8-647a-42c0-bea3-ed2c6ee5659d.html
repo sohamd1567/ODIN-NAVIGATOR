@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ODIN - Optimal Dynamic Interplanetary Navigator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                borderRadius: {
+                    lg: "var(--radius)",
+                    md: "calc(var(--radius) - 2px)",
+                    sm: "calc(var(--radius) - 4px)",
+                },
+                colors: {
+                    background: "var(--background)",
+                    foreground: "var(--foreground)",
+                    primary: {
+                        DEFAULT: "var(--primary)",
+                        foreground: "var(--primary-foreground)",
+                    },
+                    secondary: {
+                        DEFAULT: "var(--secondary)",
+                        foreground: "var(--secondary-foreground)",
+                    },
+                    accent: {
+                        DEFAULT: "var(--accent)",
+                        foreground: "var(--accent-foreground)",
+                    },
+                    muted: {
+                        DEFAULT: "var(--muted)",
+                        foreground: "var(--muted-foreground)",
+                    },
+                    cosmic: {
+                        blue: "var(--cosmic-blue)",
+                        cyan: "var(--cosmic-cyan)",
+                        purple: "var(--cosmic-purple)",
+                        gray: "var(--cosmic-gray)",
+                    }
+                },
+                fontFamily: {
+                    sans: ["Inter", "system-ui", "sans-serif"],
+                    mono: ["JetBrains Mono", "monospace"],
+                }
+            },
+        }
+    };
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.js" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --background: hsl(220 15% 8%);
+            --foreground: hsl(220 15% 95%);
+            --primary: hsl(220 70% 60%);
+            --primary-foreground: hsl(220 15% 95%);
+            --secondary: hsl(220 15% 15%);
+            --secondary-foreground: hsl(220 15% 85%);
+            --accent: hsl(270 70% 65%);
+            --accent-foreground: hsl(220 15% 95%);
+            --muted: hsl(220 10% 25%);
+            --muted-foreground: hsl(220 10% 65%);
+            --cosmic-blue: hsl(220 70% 60%);
+            --cosmic-cyan: hsl(180 100% 70%);
+            --cosmic-purple: hsl(270 70% 65%);
+            --cosmic-gray: hsl(220 10% 40%);
+            --radius: 12px;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: linear-gradient(135deg, 
+                hsl(220 50% 8%) 0%, 
+                hsl(270 40% 12%) 30%, 
+                hsl(220 60% 15%) 70%, 
+                hsl(180 30% 10%) 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 
+                        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .glow-border {
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.3),
+                        0 0 40px rgba(59, 130, 246, 0.1);
+        }
+
+        .neon-glow {
+            text-shadow: 0 0 10px currentColor,
+                         0 0 20px currentColor,
+                         0 0 30px currentColor;
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: drift 20s infinite linear;
+        }
+
+        @keyframes drift {
+            0% { transform: translateY(100vh) translateX(0); opacity: 0; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% { transform: translateY(-100px) translateX(100px); opacity: 0; }
+        }
+
+        .loading-spinner {
+            width: 24px;
+            height: 24px;
+            border: 2px solid rgba(59, 130, 246, 0.3);
+            border-top: 2px solid rgb(59, 130, 246);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .typewriter {
+            overflow: hidden;
+            border-right: 2px solid rgb(59, 130, 246);
+            white-space: nowrap;
+            animation: typing 3s steps(40, end), blink 0.5s step-end infinite alternate;
+        }
+
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        @keyframes blink {
+            50% { border-color: transparent; }
+        }
+
+        .slide-up {
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { 
+                transform: translateY(50px); 
+                opacity: 0; 
+            }
+            to { 
+                transform: translateY(0); 
+                opacity: 1; 
+            }
+        }
+
+        .slide-in-right {
+            animation: slideInRight 0.8s ease-out;
+        }
+
+        @keyframes slideInRight {
+            from { 
+                transform: translateX(100px); 
+                opacity: 0; 
+            }
+            to { 
+                transform: translateX(0); 
+                opacity: 1; 
+            }
+        }
+
+        .trajectory-line {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: drawLine 2s ease-in-out forwards;
+        }
+
+        @keyframes drawLine {
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+
+        .pulse-glow {
+            animation: pulseGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulseGlow {
+            from {
+                filter: drop-shadow(0 0 5px currentColor);
+            }
+            to {
+                filter: drop-shadow(0 0 20px currentColor) drop-shadow(0 0 30px currentColor);
+            }
+        }
+
+        .underline-animation {
+            position: relative;
+        }
+
+        .underline-animation::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgb(59, 130, 246) 20%, 
+                rgb(147, 51, 234) 50%, 
+                rgb(59, 130, 246) 80%, 
+                transparent 100%);
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { opacity: 0.5; transform: scaleX(0.8); }
+            50% { opacity: 1; transform: scaleX(1.1); }
+        }
+    </style>
+</head>
+<body class="bg-background text-foreground">
+    <!-- @COMPONENT: ParticleBackground -->
+    <div class="particles">
+        <!-- Particle system will be generated by JavaScript -->
+    </div>
+    <!-- @END_COMPONENT: ParticleBackground -->
+
+    <!-- @COMPONENT: TopNavigation -->
+    <nav class="relative z-20 w-full p-6">
+        <div class="glass-panel rounded-2xl px-8 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <!-- ODIN Logo - stylized planet + orbit -->
+                    <div class="relative w-12 h-12">
+                        <div class="absolute inset-0 rounded-full bg-gradient-to-br from-cosmic-cyan to-cosmic-purple opacity-80"></div>
+                        <div class="absolute inset-2 rounded-full border-2 border-cosmic-cyan opacity-60"></div>
+                        <div class="absolute top-1 right-1 w-2 h-2 rounded-full bg-cosmic-cyan animate-pulse"></div>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold text-primary neon-glow underline-animation" data-bind="app.title">
+                            ODIN
+                        </h1>
+                        <p class="text-sm text-muted-foreground font-mono">Optimal Dynamic Interplanetary Navigator</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="text-sm text-cosmic-cyan font-mono">
+                        STATUS: <span class="text-cosmic-cyan">OPERATIONAL</span>
+                    </div>
+                    <div class="w-3 h-3 rounded-full bg-cosmic-cyan pulse-glow"></div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- @END_COMPONENT: TopNavigation -->
+
+    <!-- @COMPONENT: MainDashboard -->
+    <main class="relative z-10 container mx-auto px-6 pb-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            
+            <!-- @COMPONENT: MissionHazardInputPanel -->
+            <div class="glass-panel rounded-2xl p-6 hover:glow-border transition-all duration-300">
+                <div class="flex items-center space-x-3 mb-6">
+                    <i data-lucide="alert-triangle" class="w-6 h-6 text-cosmic-cyan"></i>
+                    <h2 class="text-xl font-semibold text-primary">Mission Hazard Analysis</h2>
+                </div>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-muted-foreground mb-2">Select Hazard Type</label>
+                        <select id="hazardSelector" class="w-full glass-panel rounded-lg px-4 py-3 text-foreground border-0 focus:ring-2 focus:ring-cosmic-blue transition-all duration-200" data-mock="true">
+                            <option value="" data-mock="true">Choose a hazard...</option>
+                            <option value="solar-flare" data-mock="true">☀️ Solar Flare</option>
+                            <option value="space-debris" data-mock="true">🛰️ Space Debris</option>
+                            <option value="engine-failure" data-mock="true">⚡ Engine Failure</option>
+                            <option value="custom" data-mock="true">🔧 Custom Scenario</option>
+                        </select>
+                    </div>
+                    
+                    <div id="customInput" class="hidden">
+                        <label class="block text-sm font-medium text-muted-foreground mb-2">Custom Hazard Description</label>
+                        <textarea class="w-full glass-panel rounded-lg px-4 py-3 text-foreground border-0 focus:ring-2 focus:ring-cosmic-blue resize-none h-20 transition-all duration-200" placeholder="Describe the mission hazard..." data-mock="true"></textarea>
+                    </div>
+                    
+                    <button id="runOdinBtn" class="w-full bg-gradient-to-r from-cosmic-blue to-cosmic-purple hover:from-cosmic-purple hover:to-cosmic-cyan text-white font-semibold py-4 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg glow-border disabled:opacity-50" data-event="click:runOdinAnalysis" data-mock="true">
+                        <span id="btnText">🚀 Run ODIN Analysis</span>
+                        <div id="btnLoader" class="loading-spinner mx-auto hidden"></div>
+                    </button>
+                </div>
+            </div>
+            <!-- @END_COMPONENT: MissionHazardInputPanel -->
+
+            <!-- @COMPONENT: TrajectoryVisualizationPanel -->
+            <div class="glass-panel rounded-2xl p-6">
+                <div class="flex items-center space-x-3 mb-6">
+                    <i data-lucide="route" class="w-6 h-6 text-cosmic-purple"></i>
+                    <h2 class="text-xl font-semibold text-primary">Trajectory Visualization</h2>
+                </div>
+                
+                <div class="h-64 relative">
+                    <svg id="trajectoryChart" class="w-full h-full" viewBox="0 0 400 200" data-mock="true">
+                        <!-- Original trajectory (risky) -->
+                        <path id="originalPath" d="M 50 150 Q 150 50 350 100" 
+                              stroke="rgb(239, 68, 68)" 
+                              stroke-width="3" 
+                              fill="none" 
+                              opacity="0.6"
+                              stroke-dasharray="5,5" />
+                        
+                        <!-- Adjusted trajectory (safe) -->
+                        <path id="adjustedPath" d="M 50 150 Q 200 120 350 130" 
+                              stroke="rgb(34, 197, 94)" 
+                              stroke-width="3" 
+                              fill="none" 
+                              class="trajectory-line pulse-glow hidden" />
+                        
+                        <!-- Earth -->
+                        <circle cx="50" cy="150" r="8" fill="rgb(59, 130, 246)" class="pulse-glow" />
+                        <text x="50" y="175" text-anchor="middle" class="text-xs fill-cosmic-cyan font-mono">Earth</text>
+                        
+                        <!-- Mars -->
+                        <circle cx="350" cy="115" r="6" fill="rgb(239, 68, 68)" />
+                        <text x="350" y="140" text-anchor="middle" class="text-xs fill-cosmic-cyan font-mono">Mars</text>
+                        
+                        <!-- Hazard zone -->
+                        <circle id="hazardZone" cx="150" cy="75" r="20" fill="rgba(239, 68, 68, 0.2)" stroke="rgba(239, 68, 68, 0.5)" stroke-width="2" class="hidden" />
+                        <text id="hazardLabel" x="150" y="45" text-anchor="middle" class="text-xs fill-red-400 font-mono hidden">⚠️ Solar Flare</text>
+                    </svg>
+                </div>
+                
+                <div class="flex justify-between text-xs text-muted-foreground mt-4">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-4 h-0.5 bg-red-500 opacity-60"></div>
+                        <span class="font-mono">Original Route</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <div class="w-4 h-0.5 bg-green-500"></div>
+                        <span class="font-mono">ODIN Optimized</span>
+                    </div>
+                </div>
+            </div>
+            <!-- @END_COMPONENT: TrajectoryVisualizationPanel -->
+
+            <!-- @COMPONENT: DecisionLogPanel -->
+            <div class="glass-panel rounded-2xl p-6">
+                <div class="flex items-center space-x-3 mb-6">
+                    <i data-lucide="file-text" class="w-6 h-6 text-cosmic-cyan"></i>
+                    <h2 class="text-xl font-semibold text-primary">Decision Log</h2>
+                </div>
+                
+                <div id="decisionLog" class="space-y-3 h-64 overflow-y-auto font-mono text-sm" data-mock="true">
+                    <div class="text-muted-foreground">Awaiting ODIN analysis...</div>
+                </div>
+            </div>
+            <!-- @END_COMPONENT: DecisionLogPanel -->
+
+            <!-- @COMPONENT: CrewFriendlySummaryPanel -->
+            <div class="glass-panel rounded-2xl p-6">
+                <div class="flex items-center space-x-3 mb-6">
+                    <i data-lucide="users" class="w-6 h-6 text-cosmic-purple"></i>
+                    <h2 class="text-xl font-semibold text-primary">Crew Summary</h2>
+                </div>
+                
+                <div id="crewSummary" class="space-y-4" data-mock="true">
+                    <div class="text-center text-muted-foreground py-8">
+                        <i data-lucide="satellite" class="w-12 h-12 mx-auto mb-4 opacity-50"></i>
+                        <p>Ready for mission analysis</p>
+                    </div>
+                </div>
+            </div>
+            <!-- @END_COMPONENT: CrewFriendlySummaryPanel -->
+
+        </div>
+    </main>
+    <!-- @END_COMPONENT: MainDashboard -->
+
+    <script>
+        (() => {
+            // Initialize Lucide icons
+            lucide.createIcons();
+
+            // Create particle system
+            function createParticles() {
+                const particlesContainer = document.querySelector('.particles');
+                const particleCount = 50;
+
+                for (let i = 0; i < particleCount; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = 'particle';
+                    particle.style.left = Math.random() * 100 + '%';
+                    particle.style.animationDelay = Math.random() * 20 + 's';
+                    particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+                    particlesContainer.appendChild(particle);
+                }
+            }
+
+            // Mock data for different hazard scenarios
+            const hazardScenarios = {
+                'solar-flare': {
+                    logs: [
+                        '{ "timestamp": "2024-03-15T14:30:00Z", "event": "solar_flare_detected", "severity": "high" }',
+                        '{ "analysis": "radiation_levels_critical", "current_route": "compromised", "risk_factor": 0.85 }',
+                        '{ "solution": "trajectory_adjustment", "new_route": "calculated", "time_cost": "+6.2 hours" }',
+                        '{ "status": "route_optimized", "safety_margin": "acceptable", "fuel_usage": "+12%" }'
+                    ],
+                    summary: '⚠️ Solar storm detected! ODIN has calculated a safer route that avoids the radiation zone. This will add 6.2 hours to our journey but keeps the crew safe. ✅',
+                    hazardZone: { show: true, label: '⚠️ Solar Flare' }
+                },
+                'space-debris': {
+                    logs: [
+                        '{ "timestamp": "2024-03-15T14:30:00Z", "event": "debris_field_detected", "objects": 1247 }',
+                        '{ "analysis": "collision_probability", "current_route": "0.23", "acceptable_threshold": "0.05" }',
+                        '{ "solution": "micro_adjustments", "new_trajectory": "calculated", "debris_avoidance": "optimal" }',
+                        '{ "status": "course_corrected", "collision_risk": "0.001", "mission_impact": "minimal" }'
+                    ],
+                    summary: '🛰️ Space debris field ahead! ODIN has plotted micro-adjustments to weave safely through. Mission timeline remains on track with zero collision risk. 🎯',
+                    hazardZone: { show: true, label: '🛰️ Debris Field' }
+                },
+                'engine-failure': {
+                    logs: [
+                        '{ "timestamp": "2024-03-15T14:30:00Z", "event": "engine_anomaly", "thrust": "reduced_75%" }',
+                        '{ "analysis": "propulsion_systems", "backup_engines": "operational", "efficiency": "decreased" }',
+                        '{ "solution": "gravity_assist", "planetary_slingshot": "jupiter", "arrival_delay": "+3 days" }',
+                        '{ "status": "mission_viable", "fuel_conservation": "engaged", "success_probability": "0.94" }'
+                    ],
+                    summary: '⚡ Engine performance reduced! ODIN recommends using Jupiter\'s gravity for a slingshot maneuver. We\'ll arrive 3 days later but mission is still viable. 🪐',
+                    hazardZone: { show: false }
+                }
+            };
+
+            // Handle hazard selector change
+            document.getElementById('hazardSelector').addEventListener('change', function() {
+                const customInput = document.getElementById('customInput');
+                if (this.value === 'custom') {
+                    customInput.classList.remove('hidden');
+                } else {
+                    customInput.classList.add('hidden');
+                }
+            });
+
+            // Handle ODIN analysis
+            document.getElementById('runOdinBtn').addEventListener('click', function() {
+                const hazardType = document.getElementById('hazardSelector').value;
+                if (!hazardType) return;
+
+                // Start loading state
+                const btnText = document.getElementById('btnText');
+                const btnLoader = document.getElementById('btnLoader');
+                const btn = this;
+
+                btn.disabled = true;
+                btnText.classList.add('hidden');
+                btnLoader.classList.remove('hidden');
+
+                // Simulate processing time
+                setTimeout(() => {
+                    // Reset button
+                    btn.disabled = false;
+                    btnText.classList.remove('hidden');
+                    btnLoader.classList.add('hidden');
+
+                    // Run analysis
+                    runOdinAnalysis(hazardType);
+                }, 2000);
+            });
+
+            function runOdinAnalysis(hazardType) {
+                const scenario = hazardScenarios[hazardType] || hazardScenarios['solar-flare'];
+                
+                // Clear previous results
+                document.getElementById('decisionLog').innerHTML = '';
+                document.getElementById('crewSummary').innerHTML = '';
+
+                // Show trajectory elements
+                const hazardZone = document.getElementById('hazardZone');
+                const hazardLabel = document.getElementById('hazardLabel');
+                const adjustedPath = document.getElementById('adjustedPath');
+
+                if (scenario.hazardZone.show) {
+                    hazardZone.classList.remove('hidden');
+                    hazardLabel.classList.remove('hidden');
+                    hazardLabel.textContent = scenario.hazardZone.label;
+                } else {
+                    hazardZone.classList.add('hidden');
+                    hazardLabel.classList.add('hidden');
+                }
+
+                // Animate decision logs
+                setTimeout(() => {
+                    const logContainer = document.getElementById('decisionLog');
+                    logContainer.classList.add('slide-in-right');
+                    
+                    scenario.logs.forEach((log, index) => {
+                        setTimeout(() => {
+                            const logEntry = document.createElement('div');
+                            logEntry.className = 'text-cosmic-cyan typewriter';
+                            logEntry.innerHTML = syntaxHighlight(log);
+                            logContainer.appendChild(logEntry);
+                        }, index * 800);
+                    });
+                }, 500);
+
+                // Show crew summary
+                setTimeout(() => {
+                    const summaryContainer = document.getElementById('crewSummary');
+                    summaryContainer.innerHTML = `
+                        <div class="slide-up bg-gradient-to-r from-cosmic-blue/10 to-cosmic-purple/10 rounded-lg p-4 border border-cosmic-blue/20">
+                            <h3 class="font-semibold text-cosmic-cyan mb-2">Mission Update</h3>
+                            <p class="text-foreground leading-relaxed">${scenario.summary}</p>
+                        </div>
+                    `;
+                }, 2500);
+
+                // Animate trajectory
+                setTimeout(() => {
+                    adjustedPath.classList.remove('hidden');
+                }, 3000);
+            }
+
+            function syntaxHighlight(json) {
+                return json
+                    .replace(/("[\w_]+"):/g, '<span class="text-cosmic-purple">$1</span>:')
+                    .replace(/: (".*?")/g, ': <span class="text-cosmic-cyan">$1</span>')
+                    .replace(/: ([\d.]+)/g, ': <span class="text-yellow-400">$1</span>')
+                    .replace(/: (true|false)/g, ': <span class="text-green-400">$1</span>');
+            }
+
+            // Initialize particles
+            createParticles();
+
+            // TODO: Implement real-time mission data integration
+            // TODO: Add WebSocket connection for live updates
+            // TODO: Implement voice commands for hands-free operation
+            // TODO: Add 3D trajectory visualization using Three.js
+            // TODO: Integrate with actual space mission APIs
+        })();
+    </script>
+</body>
+</html>

@@ -1,6 +1,22 @@
 import { motion } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
 
+// Moon data interface
+interface MoonData {
+  date: string;
+  moonPhase: {
+    phase: string;
+    illumination: number;
+    age: number;
+  };
+  moonPosition: {
+    azimuth: number;
+    altitude: number;
+    distance: number;
+    angularDiameter: number;
+  };
+}
+
 // Moon phase emoji mapping
 function getMoonPhaseEmoji(phase: string): string {
   const phaseMap: Record<string, string> = {
@@ -18,7 +34,7 @@ function getMoonPhaseEmoji(phase: string): string {
 }
 
 export default function MoonPhaseWidget() {
-  const { data: moonData, isLoading } = useQuery({
+  const { data: moonData, isLoading } = useQuery<MoonData>({
     queryKey: ['/api/moon-data'],
     refetchInterval: 3600000, // Refresh every hour
     retry: 2

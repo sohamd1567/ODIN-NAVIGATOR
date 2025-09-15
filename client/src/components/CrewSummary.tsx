@@ -1,6 +1,8 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
+import MoonWidget from "./MoonWidget";
 import { useQuery } from "@tanstack/react-query";
+import { useMoonSummary } from "@/hooks/useMoonSummary";
 
 interface CrewSummaryProps {
   analysisComplete: boolean;
@@ -16,6 +18,8 @@ interface SummaryData {
 
 export default function CrewSummary({ analysisComplete, hazardType }: CrewSummaryProps) {
   const [summaryData, setSummaryData] = useState<SummaryData | null>(null);
+  const { data: moonSummary, isLoading: moonLoading, error: moonErr } = useMoonSummary();
+  const moonError = moonErr ? 'Failed to load moon data' : null;
 
   // Fetch live NASA data for enhanced crew summaries
   const { data: solarFlares = [] } = useQuery({
@@ -92,6 +96,8 @@ export default function CrewSummary({ analysisComplete, hazardType }: CrewSummar
     }
   }, [analysisComplete, hazardType]);
 
+  // Moon summary is provided by useMoonSummary; no local effect
+
   return (
     <motion.div 
       className="glass-panel rounded-lg p-6 border border-border/50"
@@ -145,6 +151,9 @@ export default function CrewSummary({ analysisComplete, hazardType }: CrewSummar
                   {summaryData.emoji}
                 </motion.span>
                 <div className="flex-1">
+                  <div className="mb-2">
+                    <MoonWidget loading={moonLoading} error={moonError} phase={moonSummary?.phase} illumination={moonSummary?.illumination} distance_km={moonSummary?.distance_km} />
+                  </div>
                   <motion.h3 
                     className="font-semibold text-foreground"
                     initial={{ opacity: 0 }}

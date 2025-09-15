@@ -1,0 +1,54 @@
+{
+  "missions": [
+    {
+      "id": "spacex-crs-1-2012",
+      "missionName": "SpaceX Falcon 9 CRS-1",
+      "launchDate": "2012-10-08T00:00:00Z",
+      "launchLocation": "Cape Canaveral AFS, Florida",
+      "outcome": "success",
+      "peakAltitudeKm": 350,
+      "distanceTraveledKm": 384400,
+      "missionObjective": "Resupply mission to the lunar cargo relay test platform. Validate deep-space comms and cryo transfer profile.",
+      "trajectoryData": [
+        { "x": 0, "y": 0, "altKm": 0 },
+        { "x": 50000, "y": 1200, "altKm": 120 },
+        { "x": 120000, "y": 3200, "altKm": 300 },
+        { "x": 220000, "y": 6400, "altKm": 320 },
+        { "x": 384400, "y": 0, "altKm": 1737 }
+      ]
+    },
+    {
+      "id": "test-failure-2014",
+      "missionName": "Test-Failure",
+      "launchDate": "2014-11-05T00:00:00Z",
+      "launchLocation": "Vandenberg AFB",
+      "outcome": "failure",
+      "peakAltitudeKm": 120,
+      "distanceTraveledKm": 15000,
+      "missionObjective": "R&D payload demonstrating upper stage restart. Abort during third ignition.",
+      "trajectoryData": [
+        { "x": 0, "y": 0, "altKm": 0 },
+        { "x": 3000, "y": 400, "altKm": 40 },
+        { "x": 7000, "y": 900, "altKm": 90 },
+        { "x": 11000, "y": 1200, "altKm": 110 }
+      ],
+      "failurePoint": { "x": 11000, "y": 1200, "reason": "Third-stage ignition anomaly" }
+    },
+    {
+      "id": "argo-lunar-2017",
+      "missionName": "ARGO Lunar Demonstrator",
+      "launchDate": "2017-06-19T00:00:00Z",
+      "launchLocation": "Kourou",
+      "outcome": "success",
+      "peakAltitudeKm": 420,
+      "distanceTraveledKm": 384400,
+      "missionObjective": "Demonstration of low-energy transfer to lunar gateway and autonomous orbit insertion.",
+      "trajectoryData": [
+        { "x": 0, "y": 0, "altKm": 0 },
+        { "x": 60000, "y": 1800, "altKm": 180 },
+        { "x": 180000, "y": 4200, "altKm": 380 },
+        { "x": 384400, "y": 50, "altKm": 1600 }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+{
+  "missions": [
+    {
+      "id": "mission-2012-1",
+      "name": "Explorer-I",
+      "date": "2012-03-14",
+      "location": "Cape Canaveral",
+      "peakAltitudeKm": 200,
+      "distanceKm": 384400,
+      "purpose": "Lunar transfer test",
+      "outcome": "Success",
+      "trajectory": "simulated"
+    },
+    {
+      "id": "mission-2013-1",
+      "name": "IRNSS-1A",
+      "date": "2013-07-01",
+      "location": "Satish Dhawan Space Centre",
+      "peakAltitudeKm": 20000,
+      "distanceKm": 36000,
+      "purpose": "Regional navigation satellite",
+      "outcome": "Success",
+      "trajectory": "simulated"
+    },
+    {
+      "id": "mission-2014-1",
+      "name": "Test-Failure",
+      "date": "2014-11-05",
+      "location": "Vandenberg",
+      "peakAltitudeKm": 120,
+      "distanceKm": 15000,
+      "purpose": "R&D payload",
+      "outcome": "Failure",
+      "failurePointKm": 75,
+      "trajectory": "simulated"
+    },
+    {
+      "id": "mission-2016-1",
+      "name": "LunarRelay",
+      "date": "2016-05-22",
+      "location": "Kourou",
+      "peakAltitudeKm": 350,
+      "distanceKm": 384400,
+      "purpose": "Communications relay",
+      "outcome": "Success",
+      "trajectory": "simulated"
+    },
+    {
+      "id": "mission-2018-1",
+      "name": "Cargo-Plus",
+      "date": "2018-09-30",
+      "location": "Baikonur",
+      "peakAltitudeKm": 400,
+      "distanceKm": 384400,
+      "purpose": "Cargo to lunar station",
+      "outcome": "Success",
+      "trajectory": "simulated"
+    }
+  ]
+}

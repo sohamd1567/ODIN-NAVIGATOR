@@ -1,0 +1,121 @@
+{
+  "2012": {
+    "year": "2012",
+    "origLen": 267.5441694670135,
+    "safeLen": 296.53751313583774,
+    "optLen": 272.0336112315076,
+    "illum": 50,
+    "commRisk": 0,
+    "safeECI": 0.403,
+    "optECI": 0.375,
+    "chosen": "optimized",
+    "fuelSavedPct": -2,
+    "missionExtensionHours": 1,
+    "details": {
+      "reason": "Energy-optimized pick",
+      "triggers": []
+    }
+  },
+  "2013": {
+    "year": "2013",
+    "origLen": 264.88745282073364,
+    "safeLen": 290.44818775982145,
+    "optLen": 268.4503687937472,
+    "illum": 50,
+    "commRisk": 0,
+    "safeECI": 0.399,
+    "optECI": 0.374,
+    "chosen": "optimized",
+    "fuelSavedPct": -1,
+    "missionExtensionHours": 1,
+    "details": {
+      "reason": "Energy-optimized pick",
+      "triggers": []
+    }
+  },
+  "2014": {
+    "year": "2014",
+    "origLen": 262.8776895144068,
+    "safeLen": 284.84802602101774,
+    "optLen": 265.5270055349054,
+    "illum": 50,
+    "commRisk": 0,
+    "safeECI": 0.395,
+    "optECI": 0.373,
+    "chosen": "optimized",
+    "fuelSavedPct": -1,
+    "missionExtensionHours": 1,
+    "details": {
+      "reason": "Energy-optimized pick",
+      "triggers": []
+    }
+  },
+  "2015": {
+    "year": "2015",
+    "origLen": 261.5294643796591,
+    "safeLen": 279.7662764355978,
+    "optLen": 263.28696217220596,
+    "illum": 50,
+    "commRisk": 0,
+    "safeECI": 0.391,
+    "optECI": 0.372,
+    "chosen": "optimized",
+    "fuelSavedPct": -1,
+    "missionExtensionHours": 0,
+    "details": {
+      "reason": "Energy-optimized pick",
+      "triggers": []
+    }
+  },
+  "2016": {
+    "year": "2016",
+    "origLen": 260.85279982452863,
+    "safeLen": 275.2316583234341,
+    "optLen": 261.7479779404896,
+    "illum": 50,
+    "commRisk": 0,
+    "safeECI": 0.387,
+    "optECI": 0.371,
+    "chosen": "optimized",
+    "fuelSavedPct": 0,
+    "missionExtensionHours": 0,
+    "details": {
+      "reason": "Energy-optimized pick",
+      "triggers": []
+    }
+  },
+  "2017": {
+    "year": "2017",
+    "origLen": 260.85279982452863,
+    "safeLen": 271.2717749483994,
+    "optLen": 260.92125362553963,
+    "illum": 50,
+    "commRisk": 0,
+    "safeECI": 0.382,
+    "optECI": 0.37,
+    "chosen": "optimized",
+    "fuelSavedPct": 0,
+    "missionExtensionHours": 0,
+    "details": {
+      "reason": "Energy-optimized pick",
+      "triggers": []
+    }
+  },
+  "2018": {
+    "year": "2018",
+    "origLen": 261.5294643796591,
+    "safeLen": 267.9124626440447,
+    "optLen": 260.8109516300229,
+    "illum": 50,
+    "commRisk": 0,
+    "safeECI": 0.377,
+    "optECI": 0.369,
+    "chosen": "optimized",
+    "fuelSavedPct": 0,
+    "missionExtensionHours": 0,
+    "details": {
+      "reason": "Energy-optimized pick",
+      "triggers": []
+    }
+  }
+}

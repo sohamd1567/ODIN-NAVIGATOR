@@ -1,0 +1,246 @@
+{
+  "flares": [
+    {
+      "flrID": "mock-flare-1",
+      "classType": "M1.0",
+      "beginTime": "2025-08-31T15:56:40.582Z",
+      "peakTime": "2025-08-31T15:56:40.582Z",
+      "endTime": "2025-08-31T15:56:40.582Z"
+    }
+  ],
+  "neos": [
+    {
+      "id": "mock-neo-1",
+      "name": "(MOCK 2025)",
+      "is_potentially_hazardous_asteroid": false,
+      "close_approach_data": [
+        {
+          "miss_distance": {
+            "kilometers": "1234567"
+          }
+        }
+      ]
+    }
+  ],
+  "moonSamples": [
+    {
+      "date": "2012-06-01",
+      "position": {
+        "date": "2012-06-01",
+        "data": {
+          "table": {
+            "rows": [
+              {
+                "cells": [
+                  {
+                    "position": {
+                      "horizontal": {
+                        "azimuth": {
+                          "degrees": 135.5
+                        },
+                        "altitude": {
+                          "degrees": 25.3
+                        }
+                      }
+                    },
+                    "distance": {
+                      "kilometers": 384400
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "date": "2013-06-01",
+      "position": {
+        "date": "2013-06-01",
+        "data": {
+          "table": {
+            "rows": [
+              {
+                "cells": [
+                  {
+                    "position": {
+                      "horizontal": {
+                        "azimuth": {
+                          "degrees": 135.5
+                        },
+                        "altitude": {
+                          "degrees": 25.3
+                        }
+                      }
+                    },
+                    "distance": {
+                      "kilometers": 384400
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "date": "2014-06-01",
+      "position": {
+        "date": "2014-06-01",
+        "data": {
+          "table": {
+            "rows": [
+              {
+                "cells": [
+                  {
+                    "position": {
+                      "horizontal": {
+                        "azimuth": {
+                          "degrees": 135.5
+                        },
+                        "altitude": {
+                          "degrees": 25.3
+                        }
+                      }
+                    },
+                    "distance": {
+                      "kilometers": 384400
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "date": "2015-06-01",
+      "position": {
+        "date": "2015-06-01",
+        "data": {
+          "table": {
+            "rows": [
+              {
+                "cells": [
+                  {
+                    "position": {
+                      "horizontal": {
+                        "azimuth": {
+                          "degrees": 135.5
+                        },
+                        "altitude": {
+                          "degrees": 25.3
+                        }
+                      }
+                    },
+                    "distance": {
+                      "kilometers": 384400
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "date": "2016-06-01",
+      "position": {
+        "date": "2016-06-01",
+        "data": {
+          "table": {
+            "rows": [
+              {
+                "cells": [
+                  {
+                    "position": {
+                      "horizontal": {
+                        "azimuth": {
+                          "degrees": 135.5
+                        },
+                        "altitude": {
+                          "degrees": 25.3
+                        }
+                      }
+                    },
+                    "distance": {
+                      "kilometers": 384400
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "date": "2017-06-01",
+      "position": {
+        "date": "2017-06-01",
+        "data": {
+          "table": {
+            "rows": [
+              {
+                "cells": [
+                  {
+                    "position": {
+                      "horizontal": {
+                        "azimuth": {
+                          "degrees": 135.5
+                        },
+                        "altitude": {
+                          "degrees": 25.3
+                        }
+                      }
+                    },
+                    "distance": {
+                      "kilometers": 384400
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "date": "2018-06-01",
+      "position": {
+        "date": "2018-06-01",
+        "data": {
+          "table": {
+            "rows": [
+              {
+                "cells": [
+                  {
+                    "position": {
+                      "horizontal": {
+                        "azimuth": {
+                          "degrees": 135.5
+                        },
+                        "altitude": {
+                          "degrees": 25.3
+                        }
+                      }
+                    },
+                    "distance": {
+                      "kilometers": 384400
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "startDate": "2012-01-01",
+  "endDate": "2018-12-31"
+}

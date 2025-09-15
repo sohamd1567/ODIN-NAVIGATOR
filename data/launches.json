@@ -1,0 +1,63 @@
+[
+  {
+    "id": "launch-2012-success-1",
+    "rocket_name": "Falcon 9",
+    "mission_name": "CRS-1",
+    "launch_date": "2012-10-08",
+    "launch_site": "Cape Canaveral, USA",
+    "country": "USA",
+    "status": "Success",
+    "peak_altitude_km": 350,
+    "distance_traveled_km": 15000,
+    "trajectory_coords": [
+      [28.5721, -80.6480, 0],
+      [29.0, -79.0, 50],
+      [30.0, -76.0, 150],
+      [31.0, -72.0, 300],
+      [32.0, -68.0, 350]
+    ],
+    "payload": "Dragon Cargo",
+    "objective": "Resupply ISS",
+    "outcome": "ISS resupply successful"
+  },
+  {
+    "id": "launch-2015-success-1",
+    "rocket_name": "Atlas V",
+    "mission_name": "Landsat 8",
+    "launch_date": "2015-02-11",
+    "launch_site": "Vandenberg AFB, USA",
+    "country": "USA",
+    "status": "Success",
+    "peak_altitude_km": 700,
+    "distance_traveled_km": 20000,
+    "trajectory_coords": [
+      [34.7420, -120.5724, 0],
+      [35.0, -118.0, 40],
+      [36.0, -115.0, 180],
+      [37.0, -110.0, 500],
+      [38.0, -105.0, 700]
+    ],
+    "payload": "Landsat 8",
+    "objective": "Earth observation",
+    "outcome": "Successful insertion into orbit"
+  },
+  {
+    "id": "launch-2016-failure-1",
+    "rocket_name": "Soyuz",
+    "mission_name": "Test Mission X",
+    "launch_date": "2016-07-14",
+    "launch_site": "Baikonur Cosmodrome, Kazakhstan",
+    "country": "Russia",
+    "status": "Failure",
+    "peak_altitude_km": 40,
+    "distance_traveled_km": 120,
+    "trajectory_coords": [
+      [45.964, 63.305, 0],
+      [46.0, 63.5, 10],
+      [46.2, 63.7, 25]
+    ],
+    "payload": "Test Payload",
+    "objective": "Suborbital test",
+    "outcome": "Abort due to stage anomaly"
+  }
+]

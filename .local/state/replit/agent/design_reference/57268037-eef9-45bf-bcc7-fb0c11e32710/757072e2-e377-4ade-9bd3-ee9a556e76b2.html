@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ODIN - Optimal Dynamic Interplanetary Navigator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                borderRadius: {
+                    lg: "var(--radius)",
+                    md: "calc(var(--radius) - 2px)",
+                    sm: "calc(var(--radius) - 4px)",
+                },
+                colors: {
+                    background: "var(--background)",
+                    foreground: "var(--foreground)",
+                    card: {
+                        DEFAULT: "var(--card)",
+                        foreground: "var(--card-foreground)",
+                    },
+                    primary: {
+                        DEFAULT: "var(--primary)",
+                        foreground: "var(--primary-foreground)",
+                    },
+                    secondary: {
+                        DEFAULT: "var(--secondary)",
+                        foreground: "var(--secondary-foreground)",
+                    },
+                    muted: {
+                        DEFAULT: "var(--muted)",
+                        foreground: "var(--muted-foreground)",
+                    },
+                    accent: {
+                        DEFAULT: "var(--accent)",
+                        foreground: "var(--accent-foreground)",
+                    },
+                    border: "var(--border)",
+                    ring: "var(--ring)",
+                },
+                fontFamily: {
+                    sans: ["Inter", "system-ui", "sans-serif"],
+                    mono: ["JetBrains Mono", "Monaco", "Consolas", "monospace"],
+                }
+            },
+        }
+    };
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --background: hsl(223 47% 11%);
+            --foreground: hsl(213 31% 91%);
+            --card: hsla(223 47% 11% / 0.3);
+            --card-foreground: hsl(213 31% 91%);
+            --primary: hsl(195 100% 50%);
+            --primary-foreground: hsl(223 47% 11%);
+            --secondary: hsl(262 83% 68%);
+            --secondary-foreground: hsl(223 47% 11%);
+            --muted: hsl(215 16% 47%);
+            --muted-foreground: hsl(215 20% 65%);
+            --accent: hsl(217 91% 60%);
+            --accent-foreground: hsl(223 47% 11%);
+            --border: hsla(195 100% 50% / 0.3);
+            --ring: hsl(195 100% 50%);
+            --radius: 0.75rem;
+        }
+        
+        /* Cosmic gradient background */
+        .cosmic-bg {
+            background: linear-gradient(135deg, 
+                hsl(223 47% 11%) 0%, 
+                hsl(262 83% 15%) 35%, 
+                hsl(223 73% 20%) 70%, 
+                hsl(195 100% 20%) 100%);
+        }
+        
+        /* Glassmorphism effect */
+        .glass-panel {
+            background: hsla(223 47% 11% / 0.4);
+            backdrop-filter: blur(16px);
+            border: 1px solid hsla(195 100% 50% / 0.3);
+            box-shadow: 
+                0 8px 32px hsla(195 100% 50% / 0.1),
+                inset 0 1px 0 hsla(255 255% 255% / 0.1);
+        }
+        
+        /* Neon glow effects */
+        .neon-glow {
+            box-shadow: 0 0 20px hsla(195 100% 50% / 0.5);
+        }
+        
+        .neon-text {
+            text-shadow: 0 0 10px currentColor;
+        }
+        
+        /* Particle animation */
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 4s infinite ease-in-out;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+        
+        @keyframes drift {
+            0% { transform: translateX(-100px) translateY(0); }
+            100% { transform: translateX(100vw) translateY(-20px); }
+        }
+        
+        /* Typewriter effect */
+        .typewriter {
+            overflow: hidden;
+            border-right: 2px solid var(--primary);
+            white-space: nowrap;
+            animation: typing 2s steps(30, end), blink 1s infinite;
+        }
+        
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+        
+        @keyframes blink {
+            0%, 50% { border-color: var(--primary); }
+            51%, 100% { border-color: transparent; }
+        }
+        
+        /* Spaceship animation */
+        .spaceship-path {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: drawPath 3s ease-in-out forwards;
+        }
+        
+        @keyframes drawPath {
+            to { stroke-dashoffset: 0; }
+        }
+        
+        .spaceship {
+            animation: moveShip 4s ease-in-out infinite alternate;
+        }
+        
+        @keyframes moveShip {
+            0% { transform: translateX(0) translateY(0) rotate(0deg); }
+            100% { transform: translateX(300px) translateY(-50px) rotate(15deg); }
+        }
+        
+        /* Loading animation */
+        .loading-ring {
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Slide animations */
+        .slide-in-right {
+            animation: slideInRight 0.6s ease-out forwards;
+        }
+        
+        @keyframes slideInRight {
+            0% { transform: translateX(100%); opacity: 0; }
+            100% { transform: translateX(0); opacity: 1; }
+        }
+        
+        .slide-up {
+            animation: slideUp 0.6s ease-out forwards;
+        }
+        
+        @keyframes slideUp {
+            0% { transform: translateY(50px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+    </style>
+</head>
+<body class="min-h-screen cosmic-bg text-foreground font-sans overflow-x-hidden">
+    <!-- Animated starfield background -->
+    <div class="fixed inset-0 pointer-events-none z-0" id="starfield"></div>
+    
+    <!-- @COMPONENT: Navigation -->
+    <nav class="relative z-10 p-4 glass-panel border-b border-border/50">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <!-- ODIN Logo -->
+                <div class="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-secondary neon-glow flex items-center justify-center">
+                    <span class="text-xl font-bold text-primary-foreground">🪐</span>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-bold text-primary neon-text">ODIN</h1>
+                    <div class="relative">
+                        <p class="text-sm text-muted-foreground">Optimal Dynamic Interplanetary Navigator</p>
+                        <div class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-primary to-secondary animate-pulse" 
+                             style="animation: expandLine 2s ease-in-out infinite alternate; width: 100%;"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <div class="px-3 py-1 glass-panel rounded-full text-sm text-muted-foreground">
+                    Mission Status: <span class="text-primary font-mono">ACTIVE</span>
+                </div>
+                <div class="w-3 h-3 rounded-full bg-primary animate-pulse"></div>
+            </div>
+        </div>
+    </nav>
+    <!-- @END_COMPONENT: Navigation -->
+    
+    <!-- @COMPONENT: MainDashboard -->
+    <main class="relative z-10 max-w-7xl mx-auto p-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
+        
+        <!-- @COMPONENT: HazardInputPanel -->
+        <div class="glass-panel rounded-lg p-6 border border-border/50 hover:border-primary/50 transition-all duration-300">
+            <div class="flex items-center space-x-3 mb-6">
+                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-secondary to-accent flex items-center justify-center">
+                    <span class="text-sm">⚠️</span>
+                </div>
+                <h2 class="text-xl font-semibold text-primary neon-text">Mission Hazard Assessment</h2>
+            </div>
+            
+            <div class="space-y-4">
+                <div class="relative">
+                    <label class="block text-sm font-medium text-muted-foreground mb-2">Select Hazard Type</label>
+                    <select class="w-full p-3 glass-panel border border-border/50 rounded-lg bg-background/50 text-foreground font-mono focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all">
+                        <option value="">Choose hazard scenario...</option>
+                        <option value="solar-flare">☀️ Solar Flare - High radiation event</option>
+                        <option value="space-debris">🛰️ Space Debris - Orbital collision risk</option>
+                        <option value="engine-failure">⚡ Engine Failure - Propulsion malfunction</option>
+                        <option value="communication-loss">📡 Communication Loss - Signal disruption</option>
+                        <option value="custom">🔧 Custom Scenario</option>
+                    </select>
+                </div>
+                
+                <div class="relative hidden" id="customInput">
+                    <label class="block text-sm font-medium text-muted-foreground mb-2">Custom Hazard Description</label>
+                    <textarea 
+                        class="w-full p-3 glass-panel border border-border/50 rounded-lg bg-background/50 text-foreground resize-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all" 
+                        rows="3" 
+                        placeholder="Describe the custom hazard scenario..."
+                        data-mock="true"></textarea>
+                </div>
+                
+                <!-- Run ODIN Button -->
+                <button 
+                    id="runOdinBtn" 
+                    class="w-full mt-6 px-6 py-4 bg-gradient-to-r from-primary to-secondary text-primary-foreground font-semibold rounded-lg neon-glow hover:shadow-lg hover:shadow-primary/50 transition-all duration-300 flex items-center justify-center space-x-2 group"
+                    data-event="click:runOdinAnalysis">
+                    <span id="btnText">🚀 Run ODIN Analysis</span>
+                    <div id="loadingRing" class="hidden w-5 h-5 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full loading-ring"></div>
+                </button>
+            </div>
+        </div>
+        <!-- @END_COMPONENT: HazardInputPanel -->
+        
+        <!-- @COMPONENT: TrajectoryVisualization -->
+        <div class="glass-panel rounded-lg p-6 border border-border/50">
+            <div class="flex items-center space-x-3 mb-6">
+                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-accent to-primary flex items-center justify-center">
+                    <span class="text-sm">🗺️</span>
+                </div>
+                <h2 class="text-xl font-semibold text-primary neon-text">Trajectory Visualization</h2>
+            </div>
+            
+            <div class="relative h-64 bg-background/20 rounded-lg border border-border/30 overflow-hidden">
+                <!-- SVG trajectory visualization -->
+                <svg class="w-full h-full" viewBox="0 0 400 200">
+                    <!-- Background grid -->
+                    <defs>
+                        <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="hsl(195 100% 50% / 0.1)" stroke-width="1"/>
+                        </pattern>
+                        <linearGradient id="pathGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" style="stop-color:hsl(195 100% 50%);stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:hsl(262 83% 68%);stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <rect width="100%" height="100%" fill="url(#grid)" opacity="0.3"/>
+                    
+                    <!-- Earth (left) -->
+                    <g id="earth">
+                        <circle cx="50" cy="100" r="20" fill="hsl(195 100% 50%)" opacity="0.8"/>
+                        <text x="50" y="140" text-anchor="middle" class="text-xs fill-primary font-mono">🌍 Earth</text>
+                    </g>
+                    
+                    <!-- Moon (right) -->
+                    <g id="moon">
+                        <circle cx="350" cy="80" r="12" fill="hsl(60 100% 80%)" opacity="0.8"/>
+                        <text x="350" y="110" text-anchor="middle" class="text-xs fill-yellow-300 font-mono">🌕 Moon</text>
+                    </g>
+                    
+                    <!-- Original trajectory (direct path) -->
+                    <path 
+                        id="originalPath"
+                        d="M 70 100 Q 200 100 330 80" 
+                        stroke="hsl(215 16% 47%)" 
+                        stroke-width="2" 
+                        fill="none" 
+                        stroke-dasharray="5,5"
+                        opacity="0.6"/>
+                    
+                    <!-- Adjusted trajectory (safe path) -->
+                    <path 
+                        id="adjustedPath"
+                        class="spaceship-path hidden" 
+                        d="M 70 100 Q 200 60 330 80" 
+                        stroke="url(#pathGradient)" 
+                        stroke-width="3" 
+                        fill="none"
+                        filter="drop-shadow(0 0 6px hsl(195 100% 50% / 0.6))"/>
+                    
+                    <!-- Spaceship -->
+                    <g id="spaceship" class="spaceship hidden">
+                        <text x="80" y="105" class="text-lg">🚀</text>
+                    </g>
+                    
+                    <!-- Labels -->
+                    <text x="200" y="130" text-anchor="middle" class="text-xs fill-muted-foreground font-mono opacity-60">Direct Route</text>
+                    <text x="200" y="40" text-anchor="middle" class="text-xs fill-primary font-mono hidden" id="safeRouteLabel">Safe Route (+6 hrs)</text>
+                </svg>
+            </div>
+            
+            <div class="mt-4 grid grid-cols-2 gap-4 text-sm">
+                <div class="flex items-center space-x-2">
+                    <div class="w-3 h-0.5 bg-muted opacity-60"></div>
+                    <span class="text-muted-foreground font-mono">Original Path</span>
+                </div>
+                <div class="flex items-center space-x-2 hidden" id="adjustedLegend">
+                    <div class="w-3 h-0.5 bg-gradient-to-r from-primary to-secondary"></div>
+                    <span class="text-primary font-mono">ODIN Optimized</span>
+                </div>
+            </div>
+        </div>
+        <!-- @END_COMPONENT: TrajectoryVisualization -->
+        
+        <!-- @COMPONENT: DecisionLog -->
+        <div class="glass-panel rounded-lg p-6 border border-border/50">
+            <div class="flex items-center space-x-3 mb-6">
+                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center">
+                    <span class="text-sm">📊</span>
+                </div>
+                <h2 class="text-xl font-semibold text-primary neon-text">Decision Log</h2>
+            </div>
+            
+            <div class="bg-background/30 rounded-lg p-4 font-mono text-sm max-h-64 overflow-y-auto" id="decisionLog">
+                <div class="text-muted-foreground">
+                    <span class="text-secondary">></span> ODIN system initialized...<br>
+                    <span class="text-secondary">></span> Awaiting hazard input...
+                </div>
+                
+                <!-- This will be populated dynamically -->
+                <div id="logEntries" class="hidden space-y-2 mt-4">
+                    <!-- Example log entry structure -->
+                    <div class="p-3 glass-panel rounded border border-border/30 slide-in-right">
+                        <div class="text-primary typewriter" data-bind="analysis.timestamp">
+                            [2024-01-15 14:30:22] HAZARD DETECTED
+                        </div>
+                        <div class="text-foreground mt-1">
+                            <span class="text-secondary">"hazard_type":</span> <span class="text-yellow-400">"solar_flare"</span>,<br>
+                            <span class="text-secondary">"severity":</span> <span class="text-red-400">8.2</span>,<br>
+                            <span class="text-secondary">"impact":</span> <span class="text-yellow-400">"radiation_exposure"</span>,<br>
+                            <span class="text-secondary">"recommended_action":</span> <span class="text-green-400">"trajectory_adjustment"</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- @END_COMPONENT: DecisionLog -->
+        
+        <!-- @COMPONENT: CrewSummary -->
+        <div class="glass-panel rounded-lg p-6 border border-border/50">
+            <div class="flex items-center space-x-3 mb-6">
+                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-secondary to-primary flex items-center justify-center">
+                    <span class="text-sm">👥</span>
+                </div>
+                <h2 class="text-xl font-semibold text-primary neon-text">Crew-Friendly Summary</h2>
+            </div>
+            
+            <div class="space-y-4" id="crewSummary">
+                <div class="text-muted-foreground text-center py-8">
+                    Select a hazard scenario to generate crew summary...
+                </div>
+                
+                <!-- This will be populated dynamically -->
+                <div id="summaryContent" class="hidden space-y-4">
+                    <div class="flex items-start space-x-3 p-4 glass-panel rounded-lg border border-border/30 slide-up">
+                        <span class="text-2xl flex-shrink-0">🌞</span>
+                        <div>
+                            <h3 class="font-semibold text-foreground">Solar Storm Detected</h3>
+                            <p class="text-muted-foreground mt-1">
+                                A major solar flare is approaching our path. ODIN recommends taking the scenic route 
+                                around the radiation zone. We'll arrive 6 hours later, but everyone stays healthy! ✅
+                            </p>
+                            <div class="flex items-center space-x-4 mt-3 text-sm">
+                                <span class="text-secondary">⏱️ +6 hours</span>
+                                <span class="text-green-400">✅ Safe passage</span>
+                                <span class="text-primary">🔋 Fuel: Nominal</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- @END_COMPONENT: CrewSummary -->
+        
+    </main>
+    <!-- @END_COMPONENT: MainDashboard -->
+    
+    <!-- @COMPONENT: Footer -->
+    <footer class="relative z-10 mt-12 p-6 glass-panel border-t border-border/50">
+        <div class="max-w-7xl mx-auto text-center text-muted-foreground">
+            <p class="font-mono text-sm">
+                ODIN v2.1.0 | Mission Control Interface | 
+                <span class="text-primary">Earth-Moon Transit Authority</span>
+            </p>
+        </div>
+    </footer>
+    <!-- @END_COMPONENT: Footer -->
+
+    <script>
+        (function() {
+            // Create animated starfield
+            function createStarfield() {
+                const starfield = document.getElementById('starfield');
+                const numStars = 100;
+                
+                for (let i = 0; i < numStars; i++) {
+                    const star = document.createElement('div');
+                    star.className = 'star';
+                    star.style.width = `${Math.random() * 3 + 1}px`;
+                    star.style.height = star.style.width;
+                    star.style.left = `${Math.random() * 100}%`;
+                    star.style.top = `${Math.random() * 100}%`;
+                    star.style.animationDelay = `${Math.random() * 4}s`;
+                    starfield.appendChild(star);
+                }
+            }
+            
+            // Initialize ODIN analysis simulation
+            function runOdinAnalysis() {
+                const btn = document.getElementById('runOdinBtn');
+                const btnText = document.getElementById('btnText');
+                const loadingRing = document.getElementById('loadingRing');
+                const logEntries = document.getElementById('logEntries');
+                const summaryContent = document.getElementById('summaryContent');
+                const adjustedPath = document.getElementById('adjustedPath');
+                const spaceship = document.getElementById('spaceship');
+                const adjustedLegend = document.getElementById('adjustedLegend');
+                const safeRouteLabel = document.getElementById('safeRouteLabel');
+                
+                // Start loading state
+                btnText.textContent = 'Analyzing...';
+                loadingRing.classList.remove('hidden');
+                btn.disabled = true;
+                
+                // Simulate analysis delay
+                setTimeout(() => {
+                    // Show decision log
+                    logEntries.classList.remove('hidden');
+                    
+                    // Show trajectory visualization
+                    adjustedPath.classList.remove('hidden');
+                    spaceship.classList.remove('hidden');
+                    adjustedLegend.classList.remove('hidden');
+                    safeRouteLabel.classList.remove('hidden');
+                    
+                    // Show crew summary
+                    document.querySelector('#crewSummary .text-muted-foreground').style.display = 'none';
+                    summaryContent.classList.remove('hidden');
+                    
+                    // Reset button
+                    btnText.textContent = '🚀 Analysis Complete';
+                    loadingRing.classList.add('hidden');
+                    btn.disabled = false;
+                    
+                    setTimeout(() => {
+                        btnText.textContent = '🚀 Run ODIN Analysis';
+                    }, 2000);
+                }, 2000);
+            }
+            
+            // Event listeners
+            document.getElementById('runOdinBtn').addEventListener('click', runOdinAnalysis);
+            
+            // Handle custom input toggle
+            document.querySelector('select').addEventListener('change', function(e) {
+                const customInput = document.getElementById('customInput');
+                if (e.target.value === 'custom') {
+                    customInput.classList.remove('hidden');
+                } else {
+                    customInput.classList.add('hidden');
+                }
+            });
+            
+            // Initialize starfield on load
+            createStarfield();
+            
+            // Add some floating particles for extra cosmic effect
+            setInterval(() => {
+                const particle = document.createElement('div');
+                particle.style.position = 'fixed';
+                particle.style.width = '2px';
+                particle.style.height = '2px';
+                particle.style.background = 'hsl(195 100% 50%)';
+                particle.style.borderRadius = '50%';
+                particle.style.left = '-5px';
+                particle.style.top = `${Math.random() * window.innerHeight}px`;
+                particle.style.animation = 'drift 15s linear forwards';
+                particle.style.opacity = '0.6';
+                particle.style.pointerEvents = 'none';
+                particle.style.zIndex = '5';
+                document.body.appendChild(particle);
+                
+                setTimeout(() => {
+                    particle.remove();
+                }, 15000);
+            }, 3000);
+            
+        })();
+        
+        // Add expandLine animation keyframes
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes expandLine {
+                0% { width: 0; }
+                100% { width: 100%; }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
