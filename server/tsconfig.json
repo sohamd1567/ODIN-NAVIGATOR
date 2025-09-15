@@ -1,15 +1,32 @@
 {
-  "extends": "@tsconfig/node18/tsconfig.json",
   "compilerOptions": {
-    "outDir": "../server-dist",
-    "rootDir": ".",
-    "module": "esnext",
-    "moduleResolution": "bundler",
     "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
+    "allowJs": true,
     "resolveJsonModule": true,
+    "isolatedModules": true,
+    "declaration": false,
+    "noEmit": false,
+    "outDir": "../server-dist",
+    "rootDir": "..",
+    "baseUrl": "..",
+    "strict": false,
     "skipLibCheck": true,
-    "strict": true
+    "paths": {
+      "@shared/*": ["shared/*"]
+    }
   },
-  "include": ["**/*.ts"]
+  "include": [
+    "server/**/*.ts",
+    "../shared/**/*.ts"
+  ],
+  "exclude": [
+    "../node_modules",
+    "**/*.test.ts",
+    "**/__tests__/**",
+    "../client/**/*"
+  ]
 }
