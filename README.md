@@ -195,4 +195,3 @@ Perfect for demonstration of autonomous interplanetary navigation capabilities w
 
 ---
 
-**Ready for submission as a complete NASA-grade autonomous mission operations prototype.**
