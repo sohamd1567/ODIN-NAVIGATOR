@@ -91,6 +91,7 @@
     "zustand": "^5.0.8"
   },
   "devDependencies": {
+    "@netlify/functions": "^4.2.5",
     "@replit/vite-plugin-cartographer": "^0.3.0",
     "@replit/vite-plugin-runtime-error-modal": "^0.0.3",
     "@tailwindcss/typography": "^0.5.15",
@@ -113,6 +114,7 @@
     "cross-env": "^10.0.0",
     "drizzle-kit": "^0.30.4",
     "esbuild": "^0.25.9",
+    "netlify-cli": "^23.5.1",
     "postcss": "^8.4.47",
     "rollup-plugin-visualizer": "^6.0.3",
     "supertest": "^6.3.3",

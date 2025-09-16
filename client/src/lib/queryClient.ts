@@ -2,8 +2,14 @@ import { QueryClient, QueryFunction } from "@tanstack/react-query";
 
 async function throwIfResNotOk(res: Response) {
   if (!res.ok) {
-    const text = (await res.text()) || res.statusText;
-    throw new Error(`${res.status}: ${text}`);
+    throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+  }
+  
+  // Guard against HTML responses in API calls
+  const contentType = res.headers.get("content-type") || "";
+  if (!contentType.includes("application/json")) {
+    const text = await res.text();
+    throw new Error(`Non-JSON response from ${res.url}: ${text.slice(0, 180)}…`);
   }
 }
 
@@ -37,6 +43,7 @@ export const getQueryFn: <T>(options: {
       return null;
     }
 
+    // This will check both status and content-type
     await throwIfResNotOk(res);
     return await res.json();
   };

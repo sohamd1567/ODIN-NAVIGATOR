@@ -23,14 +23,29 @@ export function useApiClient() {
     try {
       const res = await fetch(url, { method, headers: { 'content-type': 'application/json', ...headers }, body: body ? JSON.stringify(body) : undefined });
       const duration = Date.now() - started;
-      const text = await res.text();
-      const json = (() => { try { return JSON.parse(text); } catch { return text as any; }})();
-      addLog({ id: Date.now(), timestamp: new Date().toISOString().replace('T',' ').substring(0,19), type: 'API_RESPONSE', data: { url, status: res.status, durationMs: duration, correlationId }, subsystem: 'api' });
+      
+      // Guard against HTML responses
+      const contentType = res.headers.get("content-type") || "";
       if (!res.ok) {
-        const msg = typeof json === 'string' ? json : json?.message || 'Request failed';
+        const text = await res.text();
+        const msg = res.status === 404 && text.includes('<!DOCTYPE html>') 
+          ? `API endpoint not found (returned HTML instead of JSON)` 
+          : (text || res.statusText);
         addNotification({ severity: critical ? 'critical' : 'warning', title: label || 'Request error', message: `${msg} (code ${res.status})`, source: 'api' });
         throw new Error(msg);
       }
+      
+      if (!contentType.includes("application/json")) {
+        const text = await res.text();
+        const msg = `Non-JSON response from ${url}: ${text.slice(0, 180)}…`;
+        addNotification({ severity: 'warning', title: 'Invalid API Response', message: msg, source: 'api' });
+        throw new Error(msg);
+      }
+      
+      const text = await res.text();
+      const json = (() => { try { return JSON.parse(text); } catch { return text as any; }})();
+      addLog({ id: Date.now(), timestamp: new Date().toISOString().replace('T',' ').substring(0,19), type: 'API_RESPONSE', data: { url, status: res.status, durationMs: duration, correlationId }, subsystem: 'api' });
+      
       return json as T;
     } catch (err: any) {
       if (critical) {
