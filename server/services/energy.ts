@@ -132,7 +132,7 @@ export class EnergyService {
    */
   async predictCriticalEvents(timeHorizon: number = 48): Promise<any[]> {
     const forecast = await this.generateEnergyForecast(timeHorizon);
-    const events = [];
+    const events: any[] = [];
 
     // Check for low battery periods
     forecast.batteryLevels.forEach((level, index) => {

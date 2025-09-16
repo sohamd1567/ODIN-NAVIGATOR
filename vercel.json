@@ -5,13 +5,8 @@
       "src": "server/index.ts",
       "use": "@vercel/node",
       "config": {
-        "includeFiles": ["shared/**", "server/**"]
+        "includeFiles": ["dist/public/**", "server/**", "shared/**"]
       }
-    },
-    {
-      "src": "package.json",
-      "use": "@vercel/static-build",
-      "config": { "distDir": "dist/public" }
     }
   ],
   "routes": [

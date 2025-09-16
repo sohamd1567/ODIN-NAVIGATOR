@@ -1,7 +1,8 @@
 // A very small PPO-like policy network implementation for demo purposes.
 // The tensorflow native binary can be large and cause high memory use at startup.
-// We lazy-load @tensorflow/tfjs-node when predict() is called to keep server
-import * as tf from '@tensorflow/tfjs-node';
+// Environment guard to disable TensorFlow on serverless platforms
+
+let tf: any = null;
 
 // Lightweight PPO-like agent for inference (demo).
 // Not a production RL implementation; provides a simple policy network for
@@ -19,11 +20,32 @@ import * as tf from '@tensorflow/tfjs-node';
 // - time_adjustment: days (positive to add time, negative to shorten)
 
 export class PPOAgent {
-  public model: tf.LayersModel | null = null;
+  public model: any = null;
+  private tfInitialized = false;
+
+  private async initTensorFlow() {
+    if (this.tfInitialized || process.env.ODIN_DISABLE_TF === '1') {
+      return;
+    }
+    
+    try {
+      tf = await import('@tensorflow/tfjs-node');
+      this.tfInitialized = true;
+    } catch (err) {
+      console.warn('TensorFlow not available, using mock implementation');
+      this.tfInitialized = false;
+    }
+  }
 
   // createModel builds and returns a small tf.Sequential model.
   // The caller can keep the returned model or let this class hold it.
-  createModel(): tf.Sequential {
+  async createModel(): Promise<any> {
+    await this.initTensorFlow();
+    
+    if (!tf || process.env.ODIN_DISABLE_TF === '1') {
+      return null;
+    }
+
     const model = tf.sequential();
     // input shape: 4 features
     model.add(tf.layers.dense({ inputShape: [4], units: 32, activation: 'relu' }));
@@ -39,6 +61,18 @@ export class PPOAgent {
   // Predict adjustments. Accepts a numeric input array and returns a Promise of two numbers.
   // If a model isn't available or an error occurs, returns a safe fallback [0.05, 0.1].
   async predict(input: number[]): Promise<[number, number]> {
+    // If TensorFlow is disabled, return fallback immediately
+    if (process.env.ODIN_DISABLE_TF === '1') {
+      return [0.05, 0.1];
+    }
+
+    await this.initTensorFlow();
+
+    // If TensorFlow is not available, return fallback
+    if (!tf) {
+      return [0.05, 0.1];
+    }
+
     // Basic validation: ensure 4 inputs
     if (!input || input.length < 4) {
       // fallback small adjustment
@@ -48,11 +82,15 @@ export class PPOAgent {
     // Ensure we have a model; if not, create a default one
     if (!this.model) {
       try {
-        this.createModel();
+        await this.createModel();
       } catch (err) {
         // If TF native fails to initialize, return fallback
         return [0.05, 0.1];
       }
+    }
+
+    if (!this.model) {
+      return [0.05, 0.1];
     }
 
     try {
@@ -64,7 +102,7 @@ export class PPOAgent {
       const normFuel = Math.max(0, Math.min(1, fuel_pct));
 
       const tensor = tf.tensor2d([[normSeverity, normDistance, normDv, normFuel]]);
-      const out = (this.model!.predict(tensor) as tf.Tensor);
+      const out = (this.model!.predict(tensor) as any);
       const arr = await out.data();
       tensor.dispose();
       out.dispose();
@@ -86,11 +124,16 @@ export class PPOAgent {
 
   // Stub: loadModel from filesystem (expects tfjs layers format)
   async loadModel(path?: string): Promise<void> {
-    if (!path) return Promise.resolve();
+    if (!path || process.env.ODIN_DISABLE_TF === '1') return Promise.resolve();
+    
+    await this.initTensorFlow();
+    
+    if (!tf) return Promise.resolve();
+    
     try {
       // tf.loadLayersModel expects file:// prefix when loading from disk
       const model = await tf.loadLayersModel(`file://${path}/model.json`);
-      this.model = model as tf.LayersModel;
+      this.model = model;
     } catch (err) {
       // ignore errors in stub
     }
@@ -98,7 +141,12 @@ export class PPOAgent {
 
   // Stub: saveModel to filesystem (tfjs layers format)
   async saveModel(path?: string): Promise<void> {
-    if (!path || !this.model) return Promise.resolve();
+    if (!path || !this.model || process.env.ODIN_DISABLE_TF === '1') return Promise.resolve();
+    
+    await this.initTensorFlow();
+    
+    if (!tf) return Promise.resolve();
+    
     try {
       await this.model.save(`file://${path}`);
     } catch (err) {
