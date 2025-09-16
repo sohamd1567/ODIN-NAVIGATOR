@@ -39,3 +39,5 @@ logs/
 # Legacy/existing
 server/public
 vite.config.ts.*
+# Local Netlify folder
+.netlify
