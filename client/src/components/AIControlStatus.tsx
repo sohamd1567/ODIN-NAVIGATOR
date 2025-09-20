@@ -68,7 +68,7 @@ export const AIControlStatus: React.FC = () => {
                 apiStatus === 'connecting' ? 'bg-yellow-500' :
                 'bg-gray-400'
               }`} />
-              <span className="text-sm">Groq API Connection</span>
+              <span className="text-sm">AI Analysis Status</span>
             </div>
             <div className="flex items-center gap-2">
               <Badge variant={
@@ -102,7 +102,7 @@ export const AIControlStatus: React.FC = () => {
               className="flex items-center gap-1"
             >
               <Zap className="w-3 h-3" />
-              Test API Connection
+              Test AI Connection
             </Button>
             <Badge variant="outline" className="text-xs">
               All AI analysis is now manual-only

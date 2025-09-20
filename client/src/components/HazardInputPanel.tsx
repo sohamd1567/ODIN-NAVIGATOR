@@ -248,8 +248,8 @@ export default function HazardInputPanel({ onAnalysis, isAnalyzing, analysisComp
         });
 
         toast({
-          title: "Analysis Error",
-          description: `Groq analysis failed: ${errorMessage}`,
+          title: "Analysis Error", 
+          description: `AI analysis failed: ${errorMessage}`,
           variant: "destructive",
         });
       }
@@ -305,23 +305,6 @@ export default function HazardInputPanel({ onAnalysis, isAnalyzing, analysisComp
           <h2 className="text-xl font-semibold text-primary neon-text">
             {useGroqAnalysis ? 'AI-Powered Hazard Analysis' : 'Mission Hazard Assessment'}
           </h2>
-          <div className="flex items-center gap-2 mt-1">
-            {useGroqAnalysis && (
-              <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                {apiStatus === 'connected' ? (
-                  <>
-                    <Wifi className="w-3 h-3 text-green-500" />
-                    <span>Groq AI Connected</span>
-                  </>
-                ) : (
-                  <>
-                    <WifiOff className="w-3 h-3 text-red-500" />
-                    <span>AI Offline</span>
-                  </>
-                )}
-              </div>
-            )}
-          </div>
         </div>
         <Button
           variant="outline"
